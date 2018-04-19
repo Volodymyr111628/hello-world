@@ -1,0 +1,145 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+//try to add class Group
+namespace ConsoleApplication6
+{
+    class Student
+    {
+        private string bd;
+        private string name;
+        private int age;
+        private string sex;
+
+        public string Bd
+        {
+            get { return bd; }
+            set { bd = value; }
+        }
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        public int Age
+        {
+            get { return age; }
+            set { age = value; }
+        }
+        public string Sex
+        {
+            get { return sex; }
+            set { sex = value; }
+        }
+        public Student()
+        {
+            bd = "";
+            name = "";
+            age = 0;
+            sex = "";
+        }
+        public Student(string name, string sex, string bd)
+        {
+            this.bd = bd;
+            this.name = name;
+            this.age = CalcAge();
+            this.sex = sex;
+        }
+        public int CalcAge()
+        {
+            DateTime g = DateTime.Parse(bd);
+            int age1 = DateTime.Now.Year - g.Year;
+            if (DateTime.Now.Month < g.Month)
+            {
+                if (DateTime.Now.Day < g.Day)
+                {
+                    age1 -= 1;
+                }
+            }
+            return age1;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            List<Student> v = new List<Student>()
+            {
+            new Student("Éîâáàê Àíäð³àííà   ", "Æ³íî÷à  ", "20.12.1999     "),
+            new Student("Êóã³â÷àê Âîëîäèìèð ", "×îëîâ³÷à", "24.09.1998     "),
+            new Student("Ãóò³é Òåòÿíà       ", "Æ³íî÷à  ", "09.02.1999     "),
+            new Student("Ìåäèöüêèé Îëåêñàíäð", "×îëîâ³÷à", "08.05.1999     "),
+            new Student("Ãóç³é Âîëîäèìèð    ", "×îëîâ³÷à", "20.09.1999     "),
+            new Student("Âåðì³é Âîëîäèìèð   ", "×îëîâ³÷à", "10.07.1999     "),
+            new Student("Õèìåðà Áîãäàí      ", "×îëîâ³÷à", "09.09.1998     "),
+            new Student("Âîâê Þð³é          ", "×îëîâ³÷à", "20.11.1998     "),
+            new Student("ßðåìà Þë³àí        ", "×îëîâ³÷à", "01.07.1999     "),
+            new Student("Ïåòðîâñüêèé Áîãäàí ", "×îëîâ³÷à", "13.03.1999     "),
+            new Student("Àí÷³ôîðîâ ²ëëÿ     ", "×îëîâ³÷à", "12.08.1999     "),
+            new Student("Äìèòðèê Îëüãà      ", "Æ³íî÷à  ", "28.09.1999     "),
+            new Student("Ïàíüê³â Îëåñü      ", "×îëîâ³÷à", "06.12.1999     "),
+            new Student("Êð³ëü Îñòàï        ", "×îëîâ³÷à", "19.09.1999     "),
+            new Student("Îë³ùóê ²âàí        ", "×îëîâ³÷à", "27.07.1999     "),
+            new Student("Êîðîïåöüêà Ìàðòà   ", "Æ³íî÷à  ", "23.05.1999     "),
+            new Student("Ñîðîêà Ìàð³ÿ       ", "Æ³íî÷à  ", "04.12.1999     "),
+            new Student("Õîðîùàê Âàëåíòèí   ", "×îëîâ³÷à", "22.10.1999     "),
+            new Student("Ìóëèê Ðîìàí        ", "×îëîâ³÷à", "18.03.1999     "),
+            new Student("Äåëü Ñîëü Àðñåí    ", "×îëîâ³÷à", "13.05.1999     "),
+            new Student("Êîðíÿê ²ðèíà       ", "Æ³íî÷à  ", "03.04.1999     "),
+            new Student("Ñà÷êî Àíòîí        ", "×îëîâ³÷à", "04.12.1998     ")
+            };
+            IComparer<Student> nc = new NameComparer();
+            v.Sort(nc);
+            for(int i=0;i<22;i++)
+            {
+                Console.WriteLine("" + v[i].Name + "\t" + v[i].Sex + "\t" + v[i].Bd + "\t" + v[i].Age);
+            }
+            WriteToFile(v);
+            List<Student> l = new List<Student>();
+            l = ReadFromFile();
+            Console.WriteLine("\n");
+            for (int i = 0; i < 22; i++)
+            {
+                Console.WriteLine("" + l[i].Name + "\t" + l[i].Sex + "\t" + l[i].Bd + "\t" + l[i].Age);
+            }
+        }
+        public static void WriteToFile(List<Student> l)
+        {
+            string path = "C:/Projects/ConsoleApplication7/ConsoleApplication7/Users1.txt";
+            System.IO.File.WriteAllText(@"C:/Projects/ConsoleApplication7/ConsoleApplication7/Users1.txt", string.Empty);
+            if (!File.Exists(path))
+            {
+                File.Create(path).Dispose();
+            }
+            using (TextWriter tw = new StreamWriter(path, true))
+            {
+                for (int i = 0; i < 22; i++)
+                    tw.WriteLine("" + l[i].Name + "\t" + l[i].Sex + "\t" + l[i].Bd);
+            }
+        }
+        public static List<Student> ReadFromFile()
+        {
+            List<Student> l=new List<Student>();
+            Student s;
+            string[] lines = File.ReadAllLines("C:/Projects/ConsoleApplication7/ConsoleApplication7/Users1.txt");
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] line = lines[i].Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                s = new Student(line[0],line[1],line[2]);
+                l.Add(s);
+            }
+            return l;
+        }
+        public class NameComparer : System.Collections.Generic.Comparer<Student>
+        {
+            public override int Compare(Student x, Student y)
+            {
+                return x.Name.CompareTo(y.Name);
+            }
+        }
+    }
+}
